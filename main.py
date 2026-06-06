@@ -4,28 +4,28 @@ import algoritmos.AG_penalidade_estatica as AG_penalidade_estatica
 import algoritmos.AG_constrained as AG_constrained
 
 # Problema 1 - Avaliação Completa
-def avaliar_problema_1(individuo):
-    x1, x2, u1, u2 = individuo
+def avaluate_problem_1(individual):
+    x1, x2, u1, u2 = individual
     f_obj = (x1**0.6) + (x2**0.6) - 6*x1 - 4*u1 + 3*u2 #[cite: 19]
-    violacoes = []
+    violations = []
     
     h1 = abs(x2 - 3*x1 - 3*u1) - 0.0001 #[cite: 16, 20]
-    violacoes.append(max(0.0, h1))
+    violations.append(max(0.0, h1))
     g1 = x1 + 2*u1 - 4 #[cite: 21]
-    violacoes.append(max(0.0, g1))
+    violations.append(max(0.0, g1))
     g2 = x2 + 2*u2 - 4 #[cite: 22]
-    violacoes.append(max(0.0, g2))
+    violations.append(max(0.0, g2))
     
-    return f_obj, sum(violacoes)
+    return f_obj, sum(violations)
 
-# Problema 2 - Avaliação Completa (7 variáveis)
-def avaliar_problema_2(individuo):
-    x1, x2, x3, x4, x5, x6, x7 = individuo #[cite: 26]
+# Problema 2 - Avaliação Completa
+def avaluate_problem_2(individual):
+    x1, x2, x3, x4, x5, x6, x7 = individual #[cite: 26]
     f_obj = (0.7854 * x1 * (x2**2) * (3.3333*(x3**2) + 14.9334*x3 - 43.0934) - 
              1.508 * x1 * (x6**2 + x7**2) + 7.477 * (x6**3 + x7**3) + 
              0.7854 * (x4*(x6**2) + x5*(x7**2))) #[cite: 27, 28, 29]
     
-    violacoes = []
+    violations = []
     g1 = 27 - (x1 * (x2**2) * x3) #[cite: 32]
     g2 = 397.5 - (x1 * (x2**2) * (x3**2)) #[cite: 32]
     g3 = 1.93 - (x2 * (x6**4) * x3 * (x4**-3)) #[cite: 33]
@@ -46,9 +46,9 @@ def avaliar_problema_2(individuo):
     g11 = (1.5 * x7) - x5 + 1.9 #[cite: 43]
     
     for g in [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11]:
-        violacoes.append(max(0.0, g))
+        violations.append(max(0.0, g))
         
-    return f_obj, sum(violacoes)
+    return f_obj, sum(violations)
 
 print("\nSelecione o problema:")
 print(" 1 - Problema 1 - Penalidade Estatica")
@@ -58,9 +58,8 @@ print(" 4 - Problema 2 - ε-constrained")
 choice = input("Escolha (1-4): ")
 
 if choice == "1":
-    # Passando o problem_idx=1 no final
     AG_penalidade_estatica.execute(
-        ef=avaliar_problema_1, 
+        ef=avaluate_problem_1, 
         nv=4, #[cite: 18]
         bmin=np.array([0.0, 0.0, 0.0, 0.0]), #[cite: 25]
         bmax=np.array([3.0, 10.0, 10.0, 1.0]), #[cite: 23, 24]
@@ -68,7 +67,7 @@ if choice == "1":
     )
 elif choice == "2":
     AG_constrained.execute(
-        ef=avaliar_problema_1, 
+        ef=avaluate_problem_1, 
         nv=4, #[cite: 18]
         bmin=np.array([0.0, 0.0, 0.0, 0.0]), #[cite: 25]
         bmax=np.array([3.0, 10.0, 10.0, 1.0]), #[cite: 23, 24]
@@ -76,7 +75,7 @@ elif choice == "2":
     )
 elif choice == "3":
     AG_penalidade_estatica.execute(
-        ef=avaliar_problema_2, 
+        ef=avaluate_problem_2, 
         nv=7, #[cite: 26]
         bmin=np.array([2.6, 0.7, 17.0, 7.3, 7.3, 2.9, 5.0]), #[cite: 44, 45, 46, 47, 48, 49, 50]
         bmax=np.array([3.6, 0.8, 28.0, 8.3, 8.3, 3.9, 5.5]), #[cite: 44, 45, 46, 47, 48, 49, 50]
@@ -84,7 +83,7 @@ elif choice == "3":
     )
 elif choice == "4":
     AG_constrained.execute(
-        ef=avaliar_problema_2, 
+        ef=avaluate_problem_2, 
         nv=7, #[cite: 26]
         bmin=np.array([2.6, 0.7, 17.0, 7.3, 7.3, 2.9, 5.0]), #[cite: 44, 45, 46, 47, 48, 49, 50]
         bmax=np.array([3.6, 0.8, 28.0, 8.3, 8.3, 3.9, 5.5]), #[cite: 44, 45, 46, 47, 48, 49, 50]

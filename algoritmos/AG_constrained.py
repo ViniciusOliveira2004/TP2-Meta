@@ -13,22 +13,19 @@ def tournament_selection(pop, obj_values, violations, epsilon, k=3):
     for _ in range(len(pop)):
         idx = np.random.choice(len(pop), k, replace=False)
         best_idx = idx[0]
-        
-        # Implementação das Regras de Comparação Lexicográfica baseadas em Epsilon
         for cand_idx in idx[1:]:
             v_best = violations[best_idx]
             v_cand = violations[cand_idx]
             f_best = obj_values[best_idx]
             f_cand = obj_values[cand_idx]
-            
-            # Regra 1: Ambos são soluções epsilon-factíveis -> Escolhe o de menor função objetivo
+
             if v_cand <= epsilon and v_best <= epsilon:
                 if f_cand < f_best:
                     best_idx = cand_idx
-            # Regra 2: O candidato é epsilon-factível e o atual melhor não é -> Candidato ganha
+            
             elif v_cand <= epsilon and v_best > epsilon:
                 best_idx = cand_idx
-            # Regra 3: Ambos violam além de epsilon -> Escolhe o que possui a menor violação total
+
             elif v_cand > epsilon and v_best > epsilon:
                 if v_cand < v_best:
                     best_idx = cand_idx
@@ -69,11 +66,9 @@ def execute(ef, nv, bmin, bmax, problem):
             for i in range(POP_SIZE): 
                 obj_values[i], violations[i] = eval_func(population[i])
             
-            # Dinâmica do Epsilon: Cálculo do limite inicial baseado na geração zero
             if gen == 0:
                 epsilon_0 = np.max(violations) if np.max(violations) > 0 else 1.0
             
-            # Controle de decaimento não-linear do nível de tolerância (Epsilon) até 80% das gerações
             T_c = int(0.8 * GENERATIONS)
             if gen < T_c:
                 epsilon = epsilon_0 * ((1 - gen / T_c) ** 3)
@@ -83,8 +78,7 @@ def execute(ef, nv, bmin, bmax, problem):
             for i in range(POP_SIZE):
                 if violations[i] == 0 and obj_values[i] < best_run_obj:
                     best_run_obj = obj_values[i]
-            
-            # Substituição da penalidade pelo envio direto das violações e do epsilon atual para a seleção
+                    
             parents = tournament_selection(population, obj_values, violations, epsilon)
             offspring = []
             np.random.shuffle(parents)

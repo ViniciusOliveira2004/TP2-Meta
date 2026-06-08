@@ -3,47 +3,46 @@ import numpy as np
 import algoritmos.AG_penalidade_estatica as AG_penalidade_estatica
 import algoritmos.AG_constrained as AG_constrained
 
-# Problema 1 - Avaliação Completa
 def avaluate_problem_1(individual):
     x1, x2, u1, u2 = individual
-    f_obj = (x1**0.6) + (x2**0.6) - 6*x1 - 4*u1 + 3*u2 #[cite: 19]
+    f_obj = (x1**0.6) + (x2**0.6) - 6*x1 - 4*u1 + 3*u2 
     violations = []
     
-    h1 = abs(x2 - 3*x1 - 3*u1) - 0.0001 #[cite: 16, 20]
+    h1 = abs(x2 - 3*x1 - 3*u1) - 0.0001
     violations.append(max(0.0, h1))
-    g1 = x1 + 2*u1 - 4 #[cite: 21]
+    g1 = x1 + 2*u1 - 4 
     violations.append(max(0.0, g1))
-    g2 = x2 + 2*u2 - 4 #[cite: 22]
+    g2 = x2 + 2*u2 - 4 
     violations.append(max(0.0, g2))
     
     return f_obj, sum(violations)
 
-# Problema 2 - Avaliação Completa
+
 def avaluate_problem_2(individual):
-    x1, x2, x3, x4, x5, x6, x7 = individual #[cite: 26]
+    x1, x2, x3, x4, x5, x6, x7 = individual
     f_obj = (0.7854 * x1 * (x2**2) * (3.3333*(x3**2) + 14.9334*x3 - 43.0934) - 
              1.508 * x1 * (x6**2 + x7**2) + 7.477 * (x6**3 + x7**3) + 
-             0.7854 * (x4*(x6**2) + x5*(x7**2))) #[cite: 27, 28, 29]
+             0.7854 * (x4*(x6**2) + x5*(x7**2)))
     
     violations = []
-    g1 = 27 - (x1 * (x2**2) * x3) #[cite: 32]
-    g2 = 397.5 - (x1 * (x2**2) * (x3**2)) #[cite: 32]
-    g3 = 1.93 - (x2 * (x6**4) * x3 * (x4**-3)) #[cite: 33]
-    g4 = 1.93 - (x2 * (x7**4) * x3 * (x5**-3)) #[cite: 33]
+    g1 = 27 - (x1 * (x2**2) * x3)
+    g2 = 397.5 - (x1 * (x2**2) * (x3**2))
+    g3 = 1.93 - (x2 * (x6**4) * x3 * (x4**-3))
+    g4 = 1.93 - (x2 * (x7**4) * x3 * (x5**-3))
     
-    A1 = ((745.0 * x4 / (x2 * x3))**2 + 16.9e6)**0.5 #[cite: 35]
-    B1 = 0.1 * (x6**3) #[cite: 35]
-    g5 = (A1 * B1) - 1 - 1100 #[cite: 34]
+    A1 = ((745.0 * x4 / (x2 * x3))**2 + 16.9e6)**0.5
+    B1 = 0.1 * (x6**3)
+    g5 = (A1 * B1) - 1 - 1100
     
-    A2 = ((745.0 * x5 / (x2 * x3))**2 + 157.5e6)**0.5 #[cite: 37]
-    B2 = 0.1 * (x7**3) #[cite: 38]
-    g6 = (A2 / B2) - 850 #[cite: 36]
+    A2 = ((745.0 * x5 / (x2 * x3))**2 + 157.5e6)**0.5
+    B2 = 0.1 * (x7**3) 
+    g6 = (A2 / B2) - 850 
     
-    g7 = (x2 * x3) - 40 #[cite: 39]
-    g8 = 5 - (x1 / x2) #[cite: 40]
-    g9 = (x1 / x2) - 12 #[cite: 41]
-    g10 = (1.5 * x6) - x4 + 1.9 #[cite: 42]
-    g11 = (1.5 * x7) - x5 + 1.9 #[cite: 43]
+    g7 = (x2 * x3) - 40
+    g8 = 5 - (x1 / x2)
+    g9 = (x1 / x2) - 12
+    g10 = (1.5 * x6) - x4 + 1.9 
+    g11 = (1.5 * x7) - x5 + 1.9 
     
     for g in [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11]:
         violations.append(max(0.0, g))
@@ -60,32 +59,32 @@ choice = input("Escolha (1-4): ")
 if choice == "1":
     AG_penalidade_estatica.execute(
         ef=avaluate_problem_1, 
-        nv=4, #[cite: 18]
-        bmin=np.array([0.0, 0.0, 0.0, 0.0]), #[cite: 25]
-        bmax=np.array([3.0, 10.0, 10.0, 1.0]), #[cite: 23, 24]
+        nv=4,
+        bmin=np.array([0.0, 0.0, 0.0, 0.0]),
+        bmax=np.array([3.0, 10.0, 10.0, 1.0]),
         problem=1
     )
 elif choice == "2":
     AG_constrained.execute(
         ef=avaluate_problem_1, 
-        nv=4, #[cite: 18]
-        bmin=np.array([0.0, 0.0, 0.0, 0.0]), #[cite: 25]
-        bmax=np.array([3.0, 10.0, 10.0, 1.0]), #[cite: 23, 24]
+        nv=4,
+        bmin=np.array([0.0, 0.0, 0.0, 0.0]), 
+        bmax=np.array([3.0, 10.0, 10.0, 1.0]),
         problem=1
     )
 elif choice == "3":
     AG_penalidade_estatica.execute(
         ef=avaluate_problem_2, 
-        nv=7, #[cite: 26]
-        bmin=np.array([2.6, 0.7, 17.0, 7.3, 7.3, 2.9, 5.0]), #[cite: 44, 45, 46, 47, 48, 49, 50]
-        bmax=np.array([3.6, 0.8, 28.0, 8.3, 8.3, 3.9, 5.5]), #[cite: 44, 45, 46, 47, 48, 49, 50]
+        nv=7,
+        bmin=np.array([2.6, 0.7, 17.0, 7.3, 7.3, 2.9, 5.0]),
+        bmax=np.array([3.6, 0.8, 28.0, 8.3, 8.3, 3.9, 5.5]),
         problem=2
     )
 elif choice == "4":
     AG_constrained.execute(
         ef=avaluate_problem_2, 
-        nv=7, #[cite: 26]
-        bmin=np.array([2.6, 0.7, 17.0, 7.3, 7.3, 2.9, 5.0]), #[cite: 44, 45, 46, 47, 48, 49, 50]
-        bmax=np.array([3.6, 0.8, 28.0, 8.3, 8.3, 3.9, 5.5]), #[cite: 44, 45, 46, 47, 48, 49, 50]
+        nv=7,
+        bmin=np.array([2.6, 0.7, 17.0, 7.3, 7.3, 2.9, 5.0]),
+        bmax=np.array([3.6, 0.8, 28.0, 8.3, 8.3, 3.9, 5.5]),
         problem=2
     )
